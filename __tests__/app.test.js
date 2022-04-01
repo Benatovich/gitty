@@ -40,12 +40,12 @@ describe('gitty routes', () => {
     );
   });
 
-  it.only('should login and test callback endpoint', async () => {
+  it('should login and test callback endpoint', async () => {
     const req = await request
       .agent(app)
       .get('/api/v1/github/login/callback?code=42')
       .redirects(1);
-    console.log('|req.body', req.body);
+
     expect(req.body).toEqual([{
       id: '1',
       text: 'test post', 
@@ -65,15 +65,18 @@ describe('gitty routes', () => {
   });
 
 
-  it('returns a list of posts for all users', async () => {
+  it.only('returns a list of posts for all users', async () => {
     // await Post.insert({ text: 'example' });
     const agent = request.agent(app);
+    await agent.get('/api/v1/github/login/callback?code=42').redirects(1);
+    
     const res = await agent
       .get('/api/v1/posts');
 
     expect(res.body).toEqual([{
       id: expect.any(String),
-      text: 'example',
+      text: 'test post',
+      username: 'mockUser'
     }]);
   });
 
