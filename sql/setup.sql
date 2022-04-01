@@ -5,19 +5,19 @@ DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS posts CASCADE;
 
 CREATE TABLE users (
-    github_username TEXT NOT NULL PRIMARY KEY,
-    github_photo_url TEXT NOT NULL
+    username TEXT NOT NULL PRIMARY KEY,
+    photo_url TEXT NOT NULL
 );
 
 CREATE TABLE posts (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     text TEXT NOT NULL,
-    username TEXT REFERENCES users(github_username)
+    username TEXT REFERENCES users(username)
 );
 
 
 INSERT INTO 
-    users (github_username, github_photo_url)
+    users (username, photo_url)
 VALUES
     ('mockUser', 'mockPhotoUrl');
 

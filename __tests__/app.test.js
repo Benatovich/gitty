@@ -3,16 +3,17 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 
-jest.mock('../lib/middleware/authenticate.js', () => {
-  return (req, res, next) => {
-    req.user = {
-      username: 'test_user',
-      photoUrl: 'http://image.com/image.png',
-    };
+// jest.mock('../lib/middleware/authenticate.js', () => {
+//   return (req, res, next) => {
+//     req.user = {
+//       username: 'test_user',
+//       photoUrl: 'http://image.com/image.png',
+//     };
 
-    next();
-  };
-});
+//     next();
+//   };
+// });
+jest.mock('../lib/utils/github');
 
 
 describe('gitty routes', () => {
@@ -24,7 +25,7 @@ describe('gitty routes', () => {
     pool.end();
   });
 
-  it.only('redirects to the github oauth page upon login', async () => {
+  it('redirects to the github oauth page upon login', async () => {
     const req = await request(app).get('/api/v1/github/login');
 
     expect(req.header.location).toMatch(
@@ -33,5 +34,19 @@ describe('gitty routes', () => {
     );
   });
 
+  it('should login and redirect users to posts', async () => {
+    const req = await request
+      .agent(app)
+      // .get('/api/v1/github/login/callback')
+      .get('/api/v1/github/login/callback?code=42')
+      .redirects(1);
 
+    expect(req.body).toEqual({
+      id: expect.any(String),
+      username: 'test_user',
+      photoUrl: 'http://image.com/image.png',
+      iat: expect.any(Number),
+      exp: expect.any(Number),
+    });
+  });
 });
