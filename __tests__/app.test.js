@@ -4,6 +4,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 const UserService = require('../lib/services/UserService');
 const Post = require('../lib/models/Post');
+const GithubUser = require('../lib/models/GithubUser');
 
 jest.mock('../lib/utils/github');
 const mockUser = {
@@ -65,7 +66,7 @@ describe('gitty routes', () => {
   });
 
 
-  it.only('returns a list of posts for all users', async () => {
+  it('returns a list of posts for all users', async () => {
     // await Post.insert({ text: 'example' });
     const agent = request.agent(app);
     await agent.get('/api/v1/github/login/callback?code=42').redirects(1);
@@ -80,8 +81,21 @@ describe('gitty routes', () => {
     }]);
   });
 
-
-  // it('creates a post via POST', async () => {
-  //   await 
-  // })
+  it('creates a new post', async () => {
+    const agent = request.agent(app);
+    await agent.get('/api/v1/github/login/callback?code=42').redirects(1);
+    
+    const res = await agent
+      .post('/api/v1/posts')
+      .send({
+        text: 'testing, testing...'
+      });
+    
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      text: 'testing, testing...',
+      username: 'mockUser'
+    });
+  });
+  
 });
