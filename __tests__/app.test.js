@@ -20,7 +20,7 @@ describe('gitty routes', () => {
     pool.end();
   });
 
-  it.only('creates a user', async () => {
+  it('creates a user', async () => {
     const res = await request(app)
       .post('/api/v1/github')
       .send(mockUser);
@@ -51,5 +51,15 @@ describe('gitty routes', () => {
     });
   });
 
+  it.only('logs a user out/deletes the session cookie', async () => {
+    const agent = request.agent(app);
+    const res = await agent.delete('/api/v1/github');
+    const expected = {
+      message: 'Signed out successfully',
+      success: true
+    };
+
+    expect(res.body).toEqual(expected);
+  });
 
 });
