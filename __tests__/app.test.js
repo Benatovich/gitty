@@ -2,18 +2,13 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
+const UserService = require('../lib/services/UserService');
 
-// jest.mock('../lib/middleware/authenticate.js', () => {
-//   return (req, res, next) => {
-//     req.user = {
-//       username: 'test_user',
-//       photoUrl: 'http://image.com/image.png',
-//     };
-
-//     next();
-//   };
-// });
 jest.mock('../lib/utils/github');
+const mockUser = {
+  username: 'mockUser',
+  photoUrl: 'mockPhotoUrl'
+};
 
 
 describe('gitty routes', () => {
@@ -25,6 +20,16 @@ describe('gitty routes', () => {
     pool.end();
   });
 
+  it.only('creates a user', async () => {
+    const res = await request(app)
+      .post('/api/v1/github')
+      .send(mockUser);
+
+    expect(res.body).toEqual({
+      ...mockUser
+    });
+  });
+
   it('redirects to the github oauth page upon login', async () => {
     const req = await request(app).get('/api/v1/github/login');
 
@@ -34,7 +39,7 @@ describe('gitty routes', () => {
     );
   });
 
-  it.only('should login and test callback endpoint', async () => {
+  it('should login and test callback endpoint', async () => {
     const req = await request
       .agent(app)
       .get('/api/v1/github/login/callback?code=42')
@@ -45,4 +50,6 @@ describe('gitty routes', () => {
       photoUrl: '',
     });
   });
+
+
 });
