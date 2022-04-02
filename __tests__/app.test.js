@@ -32,8 +32,9 @@ describe('gitty routes', () => {
     const req = await request(app).get('/api/v1/github/login');
 
     expect(req.header.location).toMatch(
-      'https://github.com/login/oauth/authorize?client_id=cacb474b27a5efc74450&scope=user&redirect_uri=http://localhost:7890/api/v1/auth/login/callback'
+      /https:\/\/github.com\/login\/oauth\/authorize\?client_id=[\w\d]+&scope=user&redirect_uri=http:\/\/localhost:7890\/api\/v1\/github\/login\/callback/i
     );
+
   });
 
   it('should login and test callback endpoint', async () => {
