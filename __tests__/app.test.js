@@ -4,10 +4,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 
 jest.mock('../lib/utils/github');
-// const mockUser = {
-//   username: 'mockUser',
-//   photoUrl: 'mockPhotoUrl'
-// };
+
 
 describe('gitty routes', () => {
   beforeEach(() => {
@@ -36,7 +33,7 @@ describe('gitty routes', () => {
     expect(req.body).toEqual([{
       id: '1',
       text: 'test post', 
-      userId: expect.any(String),
+      user_id: expect.any(String),
       username: 'mockUser'
     }]);
   });
@@ -61,7 +58,7 @@ describe('gitty routes', () => {
       id: expect.any(String),
       text: 'test post',
       username: 'mockUser',
-      userId: expect.any(String)
+      user_id: expect.any(String)
     }]);
   });
 
@@ -73,14 +70,15 @@ describe('gitty routes', () => {
       .post('/api/v1/posts')
       .send({
         text: 'testing, testing...',
-        userId: 2
+        username: 'mockUser',
+        user_id: '1'
       });
     
     expect(res.body).toEqual({
       id: expect.any(String),
       text: 'testing, testing...',
       username: 'mockUser',
-      userId: expect.any(String)
+      user_id: expect.any(String)
     });
   });
   
