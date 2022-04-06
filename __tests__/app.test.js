@@ -4,10 +4,10 @@ const request = require('supertest');
 const app = require('../lib/app');
 
 jest.mock('../lib/utils/github');
-const mockUser = {
-  username: 'mockUser',
-  photoUrl: 'mockPhotoUrl'
-};
+// const mockUser = {
+//   username: 'mockUser',
+//   photoUrl: 'mockPhotoUrl'
+// };
 
 describe('gitty routes', () => {
   beforeEach(() => {
@@ -16,16 +16,6 @@ describe('gitty routes', () => {
 
   afterAll(() => {
     pool.end();
-  });
-
-  it('creates a user', async () => {
-    const res = await request(app)
-      .post('/api/v1/github')
-      .send(mockUser);
-
-    expect(res.body).toEqual({
-      ...mockUser
-    });
   });
 
   it('redirects to the github oauth page upon login', async () => {
@@ -46,6 +36,7 @@ describe('gitty routes', () => {
     expect(req.body).toEqual([{
       id: '1',
       text: 'test post', 
+      userId: expect.any(String),
       username: 'mockUser'
     }]);
   });
@@ -64,15 +55,13 @@ describe('gitty routes', () => {
 
   it('returns a list of posts for all users', async () => {
     const agent = request.agent(app);
-    await agent.get('/api/v1/github/login/callback?code=42').redirects(1);
-    
-    const res = await agent
-      .get('/api/v1/posts');
+    const res = await agent.get('/api/v1/github/login/callback?code=42').redirects(1);
 
     expect(res.body).toEqual([{
       id: expect.any(String),
       text: 'test post',
-      username: 'mockUser'
+      username: 'mockUser',
+      userId: expect.any(String)
     }]);
   });
 
@@ -83,13 +72,15 @@ describe('gitty routes', () => {
     const res = await agent
       .post('/api/v1/posts')
       .send({
-        text: 'testing, testing...'
+        text: 'testing, testing...',
+        userId: 2
       });
     
     expect(res.body).toEqual({
       id: expect.any(String),
       text: 'testing, testing...',
-      username: 'mockUser'
+      username: 'mockUser',
+      userId: expect.any(String)
     });
   });
   
