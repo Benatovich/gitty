@@ -5,14 +5,16 @@ DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS posts CASCADE;
 
 CREATE TABLE users (
-    username TEXT NOT NULL PRIMARY KEY,
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    username TEXT NOT NULL,
     photo_url TEXT NOT NULL
 );
 
 CREATE TABLE posts (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     text VARCHAR(255) NOT NULL,
-    username TEXT REFERENCES users(username)
+    username TEXT NOT NULL,
+    user_id BIGINT REFERENCES users(id)
 );
 
 
@@ -22,6 +24,6 @@ VALUES
     ('mockUser', 'mockPhotoUrl');
 
 INSERT INTO
-    posts (text, username)
+    posts (text, username, user_id)
 VALUES
-    ('test post', 'mockUser');
+    ('test post', 'mockUser', 1);
