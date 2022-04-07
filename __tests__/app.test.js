@@ -70,14 +70,12 @@ describe('gitty routes', () => {
       .post('/api/v1/posts')
       .send({
         text: 'testing, testing...',
-        username: 'mockUser',
         user_id: '1'
       });
     
     expect(res.body).toEqual({
       id: expect.any(String),
       text: 'testing, testing...',
-      username: 'mockUser',
       user_id: expect.any(String)
     });
   });

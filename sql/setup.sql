@@ -13,7 +13,6 @@ CREATE TABLE users (
 CREATE TABLE posts (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     text VARCHAR(255) NOT NULL,
-    username TEXT NOT NULL,
     user_id BIGINT REFERENCES users(id)
 );
 
@@ -24,6 +23,6 @@ VALUES
     ('mockUser', 'mockPhotoUrl');
 
 INSERT INTO
-    posts (text, username, user_id)
+    posts (text, user_id)
 VALUES
-    ('test post', 'mockUser', 1);
+    ('test post', 1);
