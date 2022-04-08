@@ -80,7 +80,7 @@ describe('gitty routes', () => {
     });
   });
 
-  it.only('returns an array of quote objects from 3 APIs', async () => {    
+  it('returns an array of quote objects from 3 APIs', async () => {    
     const res = await request(app).get('/api/v1/quotes');
 
     expect(res.body).toEqual([
