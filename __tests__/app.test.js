@@ -85,20 +85,17 @@ describe('gitty routes', () => {
 
     expect(res.body).toEqual([
       { 
-        id: expect.any(String), 
         author: expect.any(String),
         content: expect.any(String),  
       },
       { 
-        id: expect.any(String), 
         author: expect.any(String),
         content: expect.any(String),  
       },
       { 
-        id: expect.any(String), 
         author: expect.any(String),
         content: expect.any(String),  
-      },
+      }
     ]);
   });
   
