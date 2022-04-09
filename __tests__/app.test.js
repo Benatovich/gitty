@@ -69,22 +69,28 @@ describe('gitty routes', () => {
       });
   });
 
-  it('creates a new post', async () => {
+  it('creates a new post', () => {
     const agent = request.agent(app);
-    await agent.get('/api/v1/github/login/callback?code=42').redirects(1);
-    
-    const res = await agent
-      .post('/api/v1/posts')
-      .send({
-        text: 'testing, testing...',
-        user_id: '1'
+    return agent.get('/api/v1/github/login/callback?code=42').redirects(1)
+      .then(req => {
+        return agent
+          .post('/api/v1/posts')
+          .send({
+            text: 'testing, testing...',
+            user_id: '1'
+          })
+          .then(res => {
+            expect(res.body).toEqual({
+              id: expect.any(String),
+              text: 'testing, testing...',
+              user_id: expect.any(String)
+            });
+        
+          });
+  
       });
+  
     
-    expect(res.body).toEqual({
-      id: expect.any(String),
-      text: 'testing, testing...',
-      user_id: expect.any(String)
-    });
   });
 
   it('returns an array of quote objects from 3 APIs', async () => {    
