@@ -39,7 +39,7 @@ describe('gitty routes', () => {
       });
   });
 
-  it('logs a user out/deletes the session cookie', async () => {
+  it('logs a user out/deletes the session cookie', () => {
     const expected = {
       message: 'Signed out successfully',
       success: true
@@ -85,33 +85,29 @@ describe('gitty routes', () => {
               text: 'testing, testing...',
               user_id: expect.any(String)
             });
-        
           });
-  
+      });  
+  });
+
+  it('returns an array of quote objects from 3 APIs', () => {    
+    return request(app)
+      .get('/api/v1/quotes')
+      .then(res => {
+        expect(res.body).toEqual([
+          { 
+            author: expect.any(String),
+            content: expect.any(String),  
+          },
+          { 
+            author: expect.any(String),
+            content: expect.any(String),  
+          },
+          { 
+            author: expect.any(String),
+            content: expect.any(String),  
+          }
+        ]);
       });
-  
-    
   });
-
-  it('returns an array of quote objects from 3 APIs', async () => {    
-    const res = await request(app).get('/api/v1/quotes');
-
-    expect(res.body).toEqual([
-      { 
-        author: expect.any(String),
-        content: expect.any(String),  
-      },
-      { 
-        author: expect.any(String),
-        content: expect.any(String),  
-      },
-      { 
-        author: expect.any(String),
-        content: expect.any(String),  
-      }
-    ]);
-  });
-  
-
 
 });
