@@ -17,6 +17,7 @@ CREATE TABLE posts (
 );
 
 
+
 INSERT INTO 
     users (username, photo_url)
 VALUES
